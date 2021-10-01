@@ -1,0 +1,10 @@
+#Because Andreshko using Apple
+.DS_Store
+.AppleDouble
+.LSOverride
+
+#Ingore modules from Npm
+/node_modules
+
+#Ingore env!
+.env
