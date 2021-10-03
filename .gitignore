@@ -1,10 +1,19 @@
-#Because Andreshko using Apple
+# Because Andreshko using Apple
 .DS_Store
 .AppleDouble
 .LSOverride
 
-#Ingore modules from Npm
+# Ingore modules from Npm
 /node_modules
 
-#Ingore env!
+# Ingore env!
 .env
+
+# Ignore yarn related files
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
