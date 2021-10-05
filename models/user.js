@@ -10,9 +10,8 @@ const _ = require('lodash');
 // eslint-disable-next-line no-unused-vars
 const { result } = require('lodash');
 
-
 class User {
-    constructor(userObj){
+    constructor(userObj) {
         this.userid = userObj.userid;
         this.username = userObj.username;
         this.useremail = userObj.useremail;
@@ -24,7 +23,7 @@ class User {
         this.schedulearray = userObj.schedulearray;
     }
 
-    static validate(userValidatior){
+    static validate(userValidatior) {
         const schema = Joi.object({
             userid: Joi.number(),
             username: Joi.string(),
@@ -33,57 +32,55 @@ class User {
             eventname: Joi.string(),
             eventweek: Joi.number(),
             eventdescription: Joi.string(),
-            schedulearray: Joi.string()
-        })
-        return schema.validate(userValidatior)
+            schedulearray: Joi.string(),
+        });
+        return schema.validate(userValidatior);
     }
 
-
-    static readUserEventsById(userid){
-        return new Promise((resolve, reject) =>{
-            (async ()=>{
-                try{
-                    const pool = await sql.connect(con)
-                    const result = await pool.request()
-                    .input('userid', sql.Int(), userid)
-                    .query(`
+    static readUserEventsById(userid) {
+        return new Promise((resolve, reject) => {
+            (async () => {
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool
+                        .request()
+                        .input('userid', sql.Int(), userid).query(`
                     SELECT username, eventname, eventid, eventdescription, eventweek, schedulearray
                     FROM users u
                     JOIN eventSchedules es ON u.userid = es.FK_userid
                     JOIN event e ON es.FK_eventid = e.eventid
                     WHERE u.userid = @userid
-                    `)
+                    `);
 
                     const events = [];
-                    result.recordset.forEach(record=>{
+                    result.recordset.forEach((record) => {
                         const newEvent = {
                             username: record.username,
                             eventid: record.eventid,
                             eventname: record.eventname,
                             eventdescription: record.eventdescription,
                             eventweek: record.eventweek,
-                            schedulearray: record.schedulearray
-                        }
-                        events.push(newEvent)
-                    })
+                            schedulearray: record.schedulearray,
+                        };
+                        events.push(newEvent);
+                    });
 
                     const validEvents = [];
-                    events.forEach(event =>{
-                        const {error} = User.validate(event)
-                        if(error) throw {errorMessage: `User.validate failed`}
+                    events.forEach((event) => {
+                        const { error } = User.validate(event);
+                        if (error) {
+                            throw { errorMessage: `User.validate failed` };
+                        }
 
-                        validEvents.push(new User(event))
-                    })
-                    resolve(validEvents)
+                        validEvents.push(new User(event));
+                    });
+                    resolve(validEvents);
+                } catch (error) {
+                    reject(error);
                 }
-
-                catch(error){
-                    reject(error)
-
-                }
-                sql.close()
-            })()
-        })
+                sql.close();
+            })();
+        });
     }
 }
 

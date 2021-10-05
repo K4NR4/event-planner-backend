@@ -1,12 +1,11 @@
 {
     "port": "PORT",
-    "dbConfig_UCN":{
+    "dbConfig_UCN": {
         "user": "DB_USER",
         "password": "DB_PWD",
         "database": "DB_NAME",
         "server": "DB_HOST"
     },
-    "saltRounds":"SALTROUNDS",
+    "saltRounds": "SALTROUNDS",
     "jwt_secret_key": "JWT_SECRET_KEY"
 }
-

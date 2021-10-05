@@ -8,17 +8,26 @@ const auth = require('../middleware/authenticate');
 const User = require('../models/user');
 
 router.get('/:userid', [auth], async (req, res) => {
-    res.setHeader('Content-Type', 'application/json')
-    const {error} = User.validate(req.params)
+    res.setHeader('Content-Type', 'application/json');
+    const { error } = User.validate(req.params);
 
-    if(error) return res.status(400).send(JSON.stringify({errorMessage: `Bad request userid has to be an integer`, eventDetails:error.details[0].message }))
+    if (error) {
+        return res.status(400).send(
+            JSON.stringify({
+                errorMessage: `Bad request userid has to be an integer`,
+                eventDetails: error.details[0].message,
+            })
+        );
+    }
 
-    try{
-        const listOfUserEvents = await User.readUserEventsById(req.params.userid)
-        return res.send(JSON.stringify(listOfUserEvents))
-    }catch(error){
-        return res.status(500).send(JSON.stringify({errorMessage: error}))
+    try {
+        const listOfUserEvents = await User.readUserEventsById(
+            req.params.userid
+        );
+        return res.send(JSON.stringify(listOfUserEvents));
+    } catch (error) {
+        return res.status(500).send(JSON.stringify({ errorMessage: error }));
     }
 });
 
-module.exports = router
+module.exports = router;
